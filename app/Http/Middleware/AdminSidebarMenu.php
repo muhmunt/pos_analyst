@@ -66,13 +66,13 @@ class AdminSidebarMenu
                                 ['icon' => '', 'active' => request()->segment(1) == 'roles']
                             );
                         }
-                        if (auth()->user()->can('user.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SalesCommissionAgentController::class, 'index']),
-                                __('lang_v1.sales_commission_agents'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sales-commission-agents']
-                            );
-                        }
+                        // if (auth()->user()->can('user.create')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\SalesCommissionAgentController::class, 'index']),
+                        //         __('lang_v1.sales_commission_agents'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'sales-commission-agents']
+                        //     );
+                        // }
                     },
                     ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -86,57 +86,57 @@ class AdminSidebarMenu
             }
 
             //Contacts dropdown
-            if (auth()->user()->can('supplier.view') || auth()->user()->can('customer.view') || auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own')) {
-                $menu->dropdown(
-                    __('contact.contacts'),
-                    function ($sub) {
-                        if (auth()->user()->can('supplier.view') || auth()->user()->can('supplier.view_own')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'supplier']),
-                                __('report.supplier'),
-                                ['icon' => '', 'active' => request()->input('type') == 'supplier']
-                            );
-                        }
-                        if (auth()->user()->can('customer.view') || auth()->user()->can('customer.view_own')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'customer']),
-                                __('report.customer'),
-                                ['icon' => '', 'active' => request()->input('type') == 'customer']
-                            );
-                            $sub->url(
-                                action([\App\Http\Controllers\CustomerGroupController::class, 'index']),
-                                __('lang_v1.customer_groups'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'customer-group']
-                            );
-                        }
-                        if (auth()->user()->can('supplier.create') || auth()->user()->can('customer.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ContactController::class, 'getImportContacts']),
-                                __('lang_v1.import_contacts'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'contacts' && request()->segment(2) == 'import']
-                            );
-                        }
+            // if (auth()->user()->can('supplier.view') || auth()->user()->can('customer.view') || auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own')) {
+            //     $menu->dropdown(
+            //         __('contact.contacts'),
+            //         function ($sub) {
+            //             if (auth()->user()->can('supplier.view') || auth()->user()->can('supplier.view_own')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'supplier']),
+            //                     __('report.supplier'),
+            //                     ['icon' => '', 'active' => request()->input('type') == 'supplier']
+            //                 );
+            //             }
+            //             if (auth()->user()->can('customer.view') || auth()->user()->can('customer.view_own')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\ContactController::class, 'index'], ['type' => 'customer']),
+            //                     __('report.customer'),
+            //                     ['icon' => '', 'active' => request()->input('type') == 'customer']
+            //                 );
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\CustomerGroupController::class, 'index']),
+            //                     __('lang_v1.customer_groups'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'customer-group']
+            //                 );
+            //             }
+            //             if (auth()->user()->can('supplier.create') || auth()->user()->can('customer.create')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\ContactController::class, 'getImportContacts']),
+            //                     __('lang_v1.import_contacts'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'contacts' && request()->segment(2) == 'import']
+            //                 );
+            //             }
 
-                        if (!empty(env('GOOGLE_MAP_API_KEY'))) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ContactController::class, 'contactMap']),
-                                __('lang_v1.map'),
-                                ['icon' => 'fa fas fa-map-marker-alt', 'active' => request()->segment(1) == 'contacts' && request()->segment(2) == 'map']
-                            );
-                        }
-                    },
-                    ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z"></path>
-                    <path d="M10 16h6"></path>
-                    <path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                    <path d="M4 8h3"></path>
-                    <path d="M4 12h3"></path>
-                    <path d="M4 16h3"></path>
-                  </svg>', 'id' => 'tour_step4']
-                )->order(15);
-            }
+            //             if (!empty(env('GOOGLE_MAP_API_KEY'))) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\ContactController::class, 'contactMap']),
+            //                     __('lang_v1.map'),
+            //                     ['icon' => 'fa fas fa-map-marker-alt', 'active' => request()->segment(1) == 'contacts' && request()->segment(2) == 'map']
+            //                 );
+            //             }
+            //         },
+            //         ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z"></path>
+            //         <path d="M10 16h6"></path>
+            //         <path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+            //         <path d="M4 8h3"></path>
+            //         <path d="M4 12h3"></path>
+            //         <path d="M4 16h3"></path>
+            //       </svg>', 'id' => 'tour_step4']
+            //     )->order(15);
+            // }
 
             //Products dropdown
             if (auth()->user()->can('product.view') || auth()->user()->can('product.create') ||
@@ -161,53 +161,53 @@ class AdminSidebarMenu
                                 ['icon' => '', 'active' => request()->segment(1) == 'products' && request()->segment(2) == 'create']
                             );
                         }
-                        if (auth()->user()->can('product.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellingPriceGroupController::class, 'updateProductPrice']),
-                                __('lang_v1.update_product_price'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'update-product-price']
-                            );
-                        }
-                        if (auth()->user()->can('product.view')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\LabelsController::class, 'show']),
-                                __('barcode.print_labels'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'labels' && request()->segment(2) == 'show']
-                            );
-                        }
-                        if (auth()->user()->can('product.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\VariationTemplateController::class, 'index']),
-                                __('product.variations'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'variation-templates']
-                            );
-                            $sub->url(
-                                action([\App\Http\Controllers\ImportProductsController::class, 'index']),
-                                __('product.import_products'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'import-products']
-                            );
-                        }
-                        if (auth()->user()->can('product.opening_stock')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ImportOpeningStockController::class, 'index']),
-                                __('lang_v1.import_opening_stock'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'import-opening-stock']
-                            );
-                        }
-                        if (auth()->user()->can('product.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellingPriceGroupController::class, 'index']),
-                                __('lang_v1.selling_price_group'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'selling-price-group']
-                            );
-                        }
-                        if (auth()->user()->can('unit.view') || auth()->user()->can('unit.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\UnitController::class, 'index']),
-                                __('unit.units'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'units']
-                            );
-                        }
+                        // if (auth()->user()->can('product.create')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\SellingPriceGroupController::class, 'updateProductPrice']),
+                        //         __('lang_v1.update_product_price'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'update-product-price']
+                        //     );
+                        // }
+                        // if (auth()->user()->can('product.view')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\LabelsController::class, 'show']),
+                        //         __('barcode.print_labels'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'labels' && request()->segment(2) == 'show']
+                        //     );
+                        // }
+                        // if (auth()->user()->can('product.create')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\VariationTemplateController::class, 'index']),
+                        //         __('product.variations'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'variation-templates']
+                        //     );
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\ImportProductsController::class, 'index']),
+                        //         __('product.import_products'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'import-products']
+                        //     );
+                        // }
+                        // if (auth()->user()->can('product.opening_stock')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\ImportOpeningStockController::class, 'index']),
+                        //         __('lang_v1.import_opening_stock'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'import-opening-stock']
+                        //     );
+                        // }
+                        // if (auth()->user()->can('product.create')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\SellingPriceGroupController::class, 'index']),
+                        //         __('lang_v1.selling_price_group'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'selling-price-group']
+                        //     );
+                        // }
+                        // if (auth()->user()->can('unit.view') || auth()->user()->can('unit.create')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\UnitController::class, 'index']),
+                        //         __('unit.units'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'units']
+                        //     );
+                        // }
                         if (auth()->user()->can('category.view') || auth()->user()->can('category.create')) {
                             $sub->url(
                                 action([\App\Http\Controllers\TaxonomyController::class, 'index']) . '?type=product',
@@ -215,19 +215,19 @@ class AdminSidebarMenu
                                 ['icon' => '', 'active' => request()->segment(1) == 'taxonomies' && request()->get('type') == 'product']
                             );
                         }
-                        if (auth()->user()->can('brand.view') || auth()->user()->can('brand.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\BrandController::class, 'index']),
-                                __('brand.brands'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'brands']
-                            );
-                        }
+                        // if (auth()->user()->can('brand.view') || auth()->user()->can('brand.create')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\BrandController::class, 'index']),
+                        //         __('brand.brands'),
+                        //         ['icon' => '', 'active' => request()->segment(1) == 'brands']
+                        //     );
+                        // }
 
-                        $sub->url(
-                            action([\App\Http\Controllers\WarrantyController::class, 'index']),
-                            __('lang_v1.warranties'),
-                            ['icon' => '', 'active' => request()->segment(1) == 'warranties']
-                        );
+                        // $sub->url(
+                        //     action([\App\Http\Controllers\WarrantyController::class, 'index']),
+                        //     __('lang_v1.warranties'),
+                        //     ['icon' => '', 'active' => request()->segment(1) == 'warranties']
+                        // );
                     },
                     ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -242,209 +242,209 @@ class AdminSidebarMenu
             }
 
             //Purchase dropdown
-            if (in_array('purchases', $enabled_modules) && (auth()->user()->can('purchase.view') || auth()->user()->can('purchase.create') || auth()->user()->can('purchase.update'))) {
-                $menu->dropdown(
-                    __('purchase.purchases'),
-                    function ($sub) use ($common_settings) {
-                        if (!empty($common_settings['enable_purchase_requisition']) && (auth()->user()->can('purchase_requisition.view_all') || auth()->user()->can('purchase_requisition.view_own'))) {
-                            $sub->url(
-                                action([\App\Http\Controllers\PurchaseRequisitionController::class, 'index']),
-                                __('lang_v1.purchase_requisition'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'purchase-requisition']
-                            );
-                        }
+            // if (in_array('purchases', $enabled_modules) && (auth()->user()->can('purchase.view') || auth()->user()->can('purchase.create') || auth()->user()->can('purchase.update'))) {
+            //     $menu->dropdown(
+            //         __('purchase.purchases'),
+            //         function ($sub) use ($common_settings) {
+            //             if (!empty($common_settings['enable_purchase_requisition']) && (auth()->user()->can('purchase_requisition.view_all') || auth()->user()->can('purchase_requisition.view_own'))) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\PurchaseRequisitionController::class, 'index']),
+            //                     __('lang_v1.purchase_requisition'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'purchase-requisition']
+            //                 );
+            //             }
 
-                        if (!empty($common_settings['enable_purchase_order']) && (auth()->user()->can('purchase_order.view_all') || auth()->user()->can('purchase_order.view_own'))) {
-                            $sub->url(
-                                action([\App\Http\Controllers\PurchaseOrderController::class, 'index']),
-                                __('lang_v1.purchase_order'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'purchase-order']
-                            );
-                        }
-                        if (auth()->user()->can('purchase.view') || auth()->user()->can('view_own_purchase')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\PurchaseController::class, 'index']),
-                                __('purchase.list_purchase'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'purchases' && request()->segment(2) == null]
-                            );
-                        }
-                        if (auth()->user()->can('purchase.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\PurchaseController::class, 'create']),
-                                __('purchase.add_purchase'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'purchases' && request()->segment(2) == 'create']
-                            );
-                        }
-                        if (auth()->user()->can('purchase.update')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\PurchaseReturnController::class, 'index']),
-                                __('lang_v1.list_purchase_return'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'purchase-return']
-                            );
-                        }
-                    },
-                    ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M12 3v12"></path>
-                    <path d="M16 11l-4 4l-4 -4"></path>
-                    <path d="M3 12a9 9 0 0 0 18 0"></path>
-                  </svg>', 'id' => 'tour_step6']
-                )->order(25);
-            }
+            //             if (!empty($common_settings['enable_purchase_order']) && (auth()->user()->can('purchase_order.view_all') || auth()->user()->can('purchase_order.view_own'))) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\PurchaseOrderController::class, 'index']),
+            //                     __('lang_v1.purchase_order'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'purchase-order']
+            //                 );
+            //             }
+            //             if (auth()->user()->can('purchase.view') || auth()->user()->can('view_own_purchase')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\PurchaseController::class, 'index']),
+            //                     __('purchase.list_purchase'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'purchases' && request()->segment(2) == null]
+            //                 );
+            //             }
+            //             if (auth()->user()->can('purchase.create')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\PurchaseController::class, 'create']),
+            //                     __('purchase.add_purchase'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'purchases' && request()->segment(2) == 'create']
+            //                 );
+            //             }
+            //             if (auth()->user()->can('purchase.update')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\PurchaseReturnController::class, 'index']),
+            //                     __('lang_v1.list_purchase_return'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'purchase-return']
+            //                 );
+            //             }
+            //         },
+            //         ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path d="M12 3v12"></path>
+            //         <path d="M16 11l-4 4l-4 -4"></path>
+            //         <path d="M3 12a9 9 0 0 0 18 0"></path>
+            //       </svg>', 'id' => 'tour_step6']
+            //     )->order(25);
+            // }
             //Sell dropdown
-            if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'access_sell_return', 'direct_sell.view', 'direct_sell.update', 'access_own_sell_return'])) {
-                $menu->dropdown(
-                    __('sale.sale'),
-                    function ($sub) use ($enabled_modules, $is_admin, $pos_settings) {
-                        if (!empty($pos_settings['enable_sales_order']) && ($is_admin || auth()->user()->hasAnyPermission(['so.view_own', 'so.view_all', 'so.create']))) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SalesOrderController::class, 'index']),
-                                __('lang_v1.sales_order'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sales-order']
-                            );
-                        }
+            // if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping', 'access_sell_return', 'direct_sell.view', 'direct_sell.update', 'access_own_sell_return'])) {
+            //     $menu->dropdown(
+            //         __('sale.sale'),
+            //         function ($sub) use ($enabled_modules, $is_admin, $pos_settings) {
+            //             if (!empty($pos_settings['enable_sales_order']) && ($is_admin || auth()->user()->hasAnyPermission(['so.view_own', 'so.view_all', 'so.create']))) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SalesOrderController::class, 'index']),
+            //                     __('lang_v1.sales_order'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'sales-order']
+            //                 );
+            //             }
 
-                        if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'index']),
-                                __('lang_v1.all_sales'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == null]
-                            );
-                        }
-                        if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'create']),
-                                __('sale.add_sale'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == 'create' && empty(request()->get('status'))]
-                            );
-                        }
-                        if (auth()->user()->can('sell.create')) {
-                            if (in_array('pos_sale', $enabled_modules)) {
-                                if (auth()->user()->can('sell.view')) {
-                                    $sub->url(
-                                        action([\App\Http\Controllers\SellPosController::class, 'index']),
-                                        __('sale.list_pos'),
-                                        ['icon' => '', 'active' => request()->segment(1) == 'pos' && request()->segment(2) == null]
-                                    );
-                                }
+            //             if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellController::class, 'index']),
+            //                     __('lang_v1.all_sales'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == null]
+            //                 );
+            //             }
+            //             if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellController::class, 'create']),
+            //                     __('sale.add_sale'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == 'create' && empty(request()->get('status'))]
+            //                 );
+            //             }
+            //             if (auth()->user()->can('sell.create')) {
+            //                 if (in_array('pos_sale', $enabled_modules)) {
+            //                     if (auth()->user()->can('sell.view')) {
+            //                         $sub->url(
+            //                             action([\App\Http\Controllers\SellPosController::class, 'index']),
+            //                             __('sale.list_pos'),
+            //                             ['icon' => '', 'active' => request()->segment(1) == 'pos' && request()->segment(2) == null]
+            //                         );
+            //                     }
 
-                                $sub->url(
-                                    action([\App\Http\Controllers\SellPosController::class, 'create']),
-                                    __('sale.pos_sale'),
-                                    ['icon' => '', 'active' => request()->segment(1) == 'pos' && request()->segment(2) == 'create']
-                                );
-                            }
-                        }
+            //                     $sub->url(
+            //                         action([\App\Http\Controllers\SellPosController::class, 'create']),
+            //                         __('sale.pos_sale'),
+            //                         ['icon' => '', 'active' => request()->segment(1) == 'pos' && request()->segment(2) == 'create']
+            //                     );
+            //                 }
+            //             }
 
-                        if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'create'], ['status' => 'draft']),
-                                __('lang_v1.add_draft'),
-                                ['icon' => '', 'active' => request()->get('status') == 'draft']
-                            );
-                        }
-                        if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['draft.view_all', 'draft.view_own']))) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'getDrafts']),
-                                __('lang_v1.list_drafts'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == 'drafts']
-                            );
-                        }
-                        if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'create'], ['status' => 'quotation']),
-                                __('lang_v1.add_quotation'),
-                                ['icon' => '', 'active' => request()->get('status') == 'quotation']
-                            );
-                        }
-                        if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['quotation.view_all', 'quotation.view_own']))) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'getQuotations']),
-                                __('lang_v1.list_quotations'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == 'quotations']
-                            );
-                        }
+            //             if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellController::class, 'create'], ['status' => 'draft']),
+            //                     __('lang_v1.add_draft'),
+            //                     ['icon' => '', 'active' => request()->get('status') == 'draft']
+            //                 );
+            //             }
+            //             if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['draft.view_all', 'draft.view_own']))) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellController::class, 'getDrafts']),
+            //                     __('lang_v1.list_drafts'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == 'drafts']
+            //                 );
+            //             }
+            //             if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellController::class, 'create'], ['status' => 'quotation']),
+            //                     __('lang_v1.add_quotation'),
+            //                     ['icon' => '', 'active' => request()->get('status') == 'quotation']
+            //                 );
+            //             }
+            //             if (in_array('add_sale', $enabled_modules) && ($is_admin || auth()->user()->hasAnyPermission(['quotation.view_all', 'quotation.view_own']))) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellController::class, 'getQuotations']),
+            //                     __('lang_v1.list_quotations'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'sells' && request()->segment(2) == 'quotations']
+            //                 );
+            //             }
 
-                        if (auth()->user()->can('access_sell_return') || auth()->user()->can('access_own_sell_return')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellReturnController::class, 'index']),
-                                __('lang_v1.list_sell_return'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'sell-return' && request()->segment(2) == null]
-                            );
-                        }
+            //             if (auth()->user()->can('access_sell_return') || auth()->user()->can('access_own_sell_return')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellReturnController::class, 'index']),
+            //                     __('lang_v1.list_sell_return'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'sell-return' && request()->segment(2) == null]
+            //                 );
+            //             }
 
-                        if ($is_admin || auth()->user()->hasAnyPermission(['access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'shipments']),
-                                __('lang_v1.shipments'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'shipments']
-                            );
-                        }
+            //             if ($is_admin || auth()->user()->hasAnyPermission(['access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellController::class, 'shipments']),
+            //                     __('lang_v1.shipments'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'shipments']
+            //                 );
+            //             }
 
-                        if (auth()->user()->can('discount.access')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\DiscountController::class, 'index']),
-                                __('lang_v1.discounts'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'discount']
-                            );
-                        }
-                        if (in_array('subscription', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\SellPosController::class, 'listSubscriptions']),
-                                __('lang_v1.subscriptions'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'subscriptions']
-                            );
-                        }
+            //             if (auth()->user()->can('discount.access')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\DiscountController::class, 'index']),
+            //                     __('lang_v1.discounts'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'discount']
+            //                 );
+            //             }
+            //             if (in_array('subscription', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\SellPosController::class, 'listSubscriptions']),
+            //                     __('lang_v1.subscriptions'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'subscriptions']
+            //                 );
+            //             }
 
-                        if (auth()->user()->can('sell.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ImportSalesController::class, 'index']),
-                                __('lang_v1.import_sales'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'import-sales']
-                            );
-                        }
-                    },
-                    ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M12 15v-12"></path>
-                    <path d="M16 7l-4 -4l-4 4"></path>
-                    <path d="M3 12a9 9 0 0 0 18 0"></path>
-                  </svg>', 'id' => 'tour_step7']
-                )->order(30);
-            }
+            //             if (auth()->user()->can('sell.create')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\ImportSalesController::class, 'index']),
+            //                     __('lang_v1.import_sales'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'import-sales']
+            //                 );
+            //             }
+            //         },
+            //         ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path d="M12 15v-12"></path>
+            //         <path d="M16 7l-4 -4l-4 4"></path>
+            //         <path d="M3 12a9 9 0 0 0 18 0"></path>
+            //       </svg>', 'id' => 'tour_step7']
+            //     )->order(30);
+            // }
 
             //Stock transfer dropdown
-            if (in_array('stock_transfers', $enabled_modules) && (auth()->user()->can('purchase.view') || auth()->user()->can('purchase.create') || auth()->user()->can('view_own_purchase'))) {
-                $menu->dropdown(
-                    __('lang_v1.stock_transfers'),
-                    function ($sub) {
-                        if (auth()->user()->can('purchase.view') || auth()->user()->can('view_own_purchase')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\StockTransferController::class, 'index']),
-                                __('lang_v1.list_stock_transfers'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'stock-transfers' && request()->segment(2) == null]
-                            );
-                        }
-                        if (auth()->user()->can('purchase.create')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\StockTransferController::class, 'create']),
-                                __('lang_v1.add_stock_transfer'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'stock-transfers' && request()->segment(2) == 'create']
-                            );
-                        }
-                    },
-                    ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                    <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                    <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
-                    <path d="M3 9l4 0"></path>
-                  </svg>']
-                )->order(35);
-            }
+            // if (in_array('stock_transfers', $enabled_modules) && (auth()->user()->can('purchase.view') || auth()->user()->can('purchase.create') || auth()->user()->can('view_own_purchase'))) {
+            //     $menu->dropdown(
+            //         __('lang_v1.stock_transfers'),
+            //         function ($sub) {
+            //             if (auth()->user()->can('purchase.view') || auth()->user()->can('view_own_purchase')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\StockTransferController::class, 'index']),
+            //                     __('lang_v1.list_stock_transfers'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'stock-transfers' && request()->segment(2) == null]
+            //                 );
+            //             }
+            //             if (auth()->user()->can('purchase.create')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\StockTransferController::class, 'create']),
+            //                     __('lang_v1.add_stock_transfer'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'stock-transfers' && request()->segment(2) == 'create']
+            //                 );
+            //             }
+            //         },
+            //         ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+            //         <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+            //         <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
+            //         <path d="M3 9l4 0"></path>
+            //       </svg>']
+            //     )->order(35);
+            // }
 
             //stock adjustment dropdown
             if (in_array('stock_adjustment', $enabled_modules) && (auth()->user()->can('purchase.view') || auth()->user()->can('purchase.create') || auth()->user()->can('view_own_purchase'))) {
@@ -477,41 +477,41 @@ class AdminSidebarMenu
             }
 
             //Expense dropdown
-            if (in_array('expenses', $enabled_modules) && (auth()->user()->can('all_expense.access') || auth()->user()->can('view_own_expense'))) {
-                $menu->dropdown(
-                    __('expense.expenses'),
-                    function ($sub) {
-                        $sub->url(
-                            action([\App\Http\Controllers\ExpenseController::class, 'index']),
-                            __('lang_v1.list_expenses'),
-                            ['icon' => '', 'active' => request()->segment(1) == 'expenses' || request()->segment(1) == 'import-expense' && request()->segment(2) == null]
-                        );
+            // if (in_array('expenses', $enabled_modules) && (auth()->user()->can('all_expense.access') || auth()->user()->can('view_own_expense'))) {
+            //     $menu->dropdown(
+            //         __('expense.expenses'),
+            //         function ($sub) {
+            //             $sub->url(
+            //                 action([\App\Http\Controllers\ExpenseController::class, 'index']),
+            //                 __('lang_v1.list_expenses'),
+            //                 ['icon' => '', 'active' => request()->segment(1) == 'expenses' || request()->segment(1) == 'import-expense' && request()->segment(2) == null]
+            //             );
 
-                        if (auth()->user()->can('expense.add')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ExpenseController::class, 'create']),
-                                __('expense.add_expense'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'expenses' && request()->segment(2) == 'create']
-                            );
-                        }
+            //             if (auth()->user()->can('expense.add')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\ExpenseController::class, 'create']),
+            //                     __('expense.add_expense'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'expenses' && request()->segment(2) == 'create']
+            //                 );
+            //             }
 
-                        if (auth()->user()->can('expense.add') || auth()->user()->can('expense.edit')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ExpenseCategoryController::class, 'index']),
-                                __('expense.expense_categories'),
-                                ['icon' => '', 'active' => request()->segment(1) == 'expense-categories']
-                            );
-                        }
-                    },
-                    ['icon' => ' <svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"></path>
-                    <path d="M14.8 8a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"></path>
-                    <path d="M12 6v10"></path>
-                  </svg>']
-                )->order(45);
-            }
+            //             if (auth()->user()->can('expense.add') || auth()->user()->can('expense.edit')) {
+            //                 $sub->url(
+            //                     action([\App\Http\Controllers\ExpenseCategoryController::class, 'index']),
+            //                     __('expense.expense_categories'),
+            //                     ['icon' => '', 'active' => request()->segment(1) == 'expense-categories']
+            //                 );
+            //             }
+            //         },
+            //         ['icon' => ' <svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"></path>
+            //         <path d="M14.8 8a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"></path>
+            //         <path d="M12 6v10"></path>
+            //       </svg>']
+            //     )->order(45);
+            // }
             //Accounts dropdown
             if (auth()->user()->can('account.access') && in_array('account', $enabled_modules)) {
                 $menu->dropdown(
@@ -591,25 +591,25 @@ class AdminSidebarMenu
                             );
                         }
 
-                        if (auth()->user()->can('tax_report.view')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ReportController::class, 'getTaxReport']),
-                                __('report.tax_report'),
-                                ['icon' => '', 'active' => request()->segment(2) == 'tax-report']
-                            );
-                        }
-                        if (auth()->user()->can('contacts_report.view')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ReportController::class, 'getCustomerSuppliers']),
-                                __('report.contacts'),
-                                ['icon' => '', 'active' => request()->segment(2) == 'customer-supplier']
-                            );
-                            $sub->url(
-                                action([\App\Http\Controllers\ReportController::class, 'getCustomerGroup']),
-                                __('lang_v1.customer_groups_report'),
-                                ['icon' => '', 'active' => request()->segment(2) == 'customer-group']
-                            );
-                        }
+                        // if (auth()->user()->can('tax_report.view')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\ReportController::class, 'getTaxReport']),
+                        //         __('report.tax_report'),
+                        //         ['icon' => '', 'active' => request()->segment(2) == 'tax-report']
+                        //     );
+                        // }
+                        // if (auth()->user()->can('contacts_report.view')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\ReportController::class, 'getCustomerSuppliers']),
+                        //         __('report.contacts'),
+                        //         ['icon' => '', 'active' => request()->segment(2) == 'customer-supplier']
+                        //     );
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\ReportController::class, 'getCustomerGroup']),
+                        //         __('lang_v1.customer_groups_report'),
+                        //         ['icon' => '', 'active' => request()->segment(2) == 'customer-group']
+                        //     );
+                        // }
                         if (auth()->user()->can('stock_report.view')) {
                             $sub->url(
                                 action([\App\Http\Controllers\ReportController::class, 'getStockReport']),
@@ -655,11 +655,11 @@ class AdminSidebarMenu
                                 ['icon' => '', 'active' => request()->segment(2) == 'items-report']
                             );
 
-                            $sub->url(
-                                action([\App\Http\Controllers\ReportController::class, 'getproductPurchaseReport']),
-                                __('lang_v1.product_purchase_report'),
-                                ['icon' => '', 'active' => request()->segment(2) == 'product-purchase-report']
-                            );
+                            // $sub->url(
+                            //     action([\App\Http\Controllers\ReportController::class, 'getproductPurchaseReport']),
+                            //     __('lang_v1.product_purchase_report'),
+                            //     ['icon' => '', 'active' => request()->segment(2) == 'product-purchase-report']
+                            // );
 
                             $sub->url(
                                 action([\App\Http\Controllers\ReportController::class, 'getproductSellReport']),
@@ -667,11 +667,11 @@ class AdminSidebarMenu
                                 ['icon' => '', 'active' => request()->segment(2) == 'product-sell-report']
                             );
 
-                            $sub->url(
-                                action([\App\Http\Controllers\ReportController::class, 'purchasePaymentReport']),
-                                __('lang_v1.purchase_payment_report'),
-                                ['icon' => '', 'active' => request()->segment(2) == 'purchase-payment-report']
-                            );
+                            // $sub->url(
+                            //     action([\App\Http\Controllers\ReportController::class, 'purchasePaymentReport']),
+                            //     __('lang_v1.purchase_payment_report'),
+                            //     ['icon' => '', 'active' => request()->segment(2) == 'purchase-payment-report']
+                            // );
 
                             $sub->url(
                                 action([\App\Http\Controllers\ReportController::class, 'sellPaymentReport']),
@@ -679,13 +679,13 @@ class AdminSidebarMenu
                                 ['icon' => '', 'active' => request()->segment(2) == 'sell-payment-report']
                             );
                         }
-                        if (in_array('expenses', $enabled_modules) && auth()->user()->can('expense_report.view')) {
-                            $sub->url(
-                                action([\App\Http\Controllers\ReportController::class, 'getExpenseReport']),
-                                __('report.expense_report'),
-                                ['icon' => '', 'active' => request()->segment(2) == 'expense-report']
-                            );
-                        }
+                        // if (in_array('expenses', $enabled_modules) && auth()->user()->can('expense_report.view')) {
+                        //     $sub->url(
+                        //         action([\App\Http\Controllers\ReportController::class, 'getExpenseReport']),
+                        //         __('report.expense_report'),
+                        //         ['icon' => '', 'active' => request()->segment(2) == 'expense-report']
+                        //     );
+                        // }
                         if (auth()->user()->can('register_report.view')) {
                             $sub->url(
                                 action([\App\Http\Controllers\ReportController::class, 'getRegisterReport']),
@@ -753,26 +753,26 @@ class AdminSidebarMenu
             }
 
             //Backup menu
-            if (auth()->user()->can('backup')) {
-                $menu->url(action([\App\Http\Controllers\BackUpController::class, 'index']), __('lang_v1.backup'), ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M12 18.004h-5.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.38 0 2.57 .811 3.128 1.986"></path>
-                <path d="M19 22v-6"></path>
-                <path d="M22 19l-3 -3l-3 3"></path>
-              </svg>', 'active' => request()->segment(1) == 'backup'])->order(60);
-            }
+            // if (auth()->user()->can('backup')) {
+            //     $menu->url(action([\App\Http\Controllers\BackUpController::class, 'index']), __('lang_v1.backup'), ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //     <path d="M12 18.004h-5.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.38 0 2.57 .811 3.128 1.986"></path>
+            //     <path d="M19 22v-6"></path>
+            //     <path d="M22 19l-3 -3l-3 3"></path>
+            //   </svg>', 'active' => request()->segment(1) == 'backup'])->order(60);
+            // }
 
             //Modules menu
-            if (auth()->user()->can('manage_modules')) {
-                $menu->url(action([\App\Http\Controllers\Install\ModulesController::class, 'index']), __('lang_v1.modules'), ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M12 4l-8 4l8 4l8 -4l-8 -4"></path>
-              <path d="M4 12l8 4l8 -4"></path>
-              <path d="M4 16l8 4l8 -4"></path>
-            </svg>', 'active' => request()->segment(1) == 'manage-modules'])->order(60);
-            }
+            // if (auth()->user()->can('manage_modules')) {
+            //     $menu->url(action([\App\Http\Controllers\Install\ModulesController::class, 'index']), __('lang_v1.modules'), ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //   <path d="M12 4l-8 4l8 4l8 -4l-8 -4"></path>
+            //   <path d="M4 12l8 4l8 -4"></path>
+            //   <path d="M4 16l8 4l8 -4"></path>
+            // </svg>', 'active' => request()->segment(1) == 'manage-modules'])->order(60);
+            // }
 
             //Booking menu
             if (in_array('booking', $enabled_modules) && (auth()->user()->can('crud_all_bookings') || auth()->user()->can('crud_own_bookings'))) {
@@ -790,14 +790,14 @@ class AdminSidebarMenu
             }
 
             //Notification template menu
-            if (auth()->user()->can('send_notifications')) {
-                $menu->url(action([\App\Http\Controllers\NotificationTemplateController::class, 'index']), __('lang_v1.notification_templates'), ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path>
-                    <path d="M3 7l9 6l9 -6"></path>
-                  </svg>', 'active' => request()->segment(1) == 'notification-templates'])->order(80);
-            }
+            // if (auth()->user()->can('send_notifications')) {
+            //     $menu->url(action([\App\Http\Controllers\NotificationTemplateController::class, 'index']), __('lang_v1.notification_templates'), ['icon' => '<svg aria-hidden="true" class="tw-size-5 tw-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            //         <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path>
+            //         <path d="M3 7l9 6l9 -6"></path>
+            //       </svg>', 'active' => request()->segment(1) == 'notification-templates'])->order(80);
+            // }
 
             //Settings Dropdown
             if (auth()->user()->can('business_settings.access') ||

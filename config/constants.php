@@ -45,7 +45,8 @@ return [
 
     'enable_sell_in_diff_currency' => false,
     'currency_exchange_rate' => 1,
-    'orders_refresh_interval' => 600, //Auto refresh interval on Kitchen and Orders page in seconds,
+    'orders_refresh_interval' => 100, //Auto refresh interval on Kitchen and Orders page in seconds,
+    // 'orders_refresh_interval' => 600, //Auto refresh interval on Kitchen and Orders page in seconds,
 
     'pos_recent_transactions_display_limit' => env('POS_RECENT_TRANSACTIONS_DISPLAY_LIMIT', 10), //Controls how many recent transactions are shown in POS recent transactions list default is 10
 
