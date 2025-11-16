@@ -9,8 +9,99 @@
 </section>
 
 <!-- Main content -->
-<section class="content no-print">
+<section class="content">
+    <div class="print_section"><h2>{{session()->get('business.name')}} - {{ __('lang_v1.product_sell_report')}}</h2></div>
+    <div class="row no-print">
+        <div class="col-md-3 col-md-offset-7 col-xs-6">
+            <div class="input-group">
+                <span class="input-group-addon bg-light-blue"><i class="fa fa-map-marker"></i></span>
+                 <select class="form-control select2" id="purchase_sell_location_filter">
+                    @foreach($business_locations as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group pull-right">
+                <div class="input-group">
+                  <button type="button" class="tw-dw-btn tw-dw-btn-primary tw-text-white tw-dw-btn-sm" id="purchase_sell_date_filter">
+                    <span>
+                      <i class="fa fa-calendar"></i> {{ __('messages.filter_by_date') }}
+                    </span>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="row">
+        <div class="col-xs-12">
+            @component('components.widget', ['title' => __('sale.sells')])
+                <table class="table table-striped">
+                    <tr>
+                        <th>{{ __('report.total_sell') }}:</th>
+                        <td>
+                            <span class="total_sell">
+                                <i class="fas fa-sync fa-spin fa-fw"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ __('report.sell_inc_tax') }}:</th>
+                        <td>
+                             <span class="sell_inc_tax">
+                                <i class="fas fa-sync fa-spin fa-fw"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            @endcomponent
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            @component('components.widget')
+                @slot('title')
+                    {{ __('lang_v1.overall') }} 
+                    @lang('business.sale')
+                    <!-- @show_tooltip(__('tooltip.over_all_sell_purchase')) -->
+                @endslot
+                <h3 class="text-muted">
+                    {{ __('report.sell_minus_purchase') }}: 
+                    <span class="sell_minus_purchase">
+                        <i class="fas fa-sync fa-spin fa-fw"></i>
+                    </span>
+                </h3>
+
+                <!-- <h3 class="text-muted">
+                    {{ __('report.difference_due') }}: 
+                    <span class="difference_due">
+                        <i class="fas fa-sync fa-spin fa-fw"></i>
+                    </span>
+                </h3> -->
+            @endcomponent
+        </div>
+    </div>
+    <!-- <div class="row no-print">
+        <div class="col-sm-12">
+            <button class="tw-dw-btn tw-dw-btn-primary tw-text-white pull-right" aria-label="Print"
+                onclick="window.print();">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-printer">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" />
+                    <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" />
+                    <path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" />
+                </svg> @lang('messages.print')
+            </button>
+        </div>
+    </div> -->
+    <br>
+    <div class="row no-print">
         <div class="col-md-12">
             @component('components.filters', ['title' => __('report.filters')])
               {!! Form::open(['url' => action([\App\Http\Controllers\ReportController::class, 'getStockReport']), 'method' => 'get', 'id' => 'product_sell_report_form' ]) !!}
@@ -214,12 +305,78 @@
 @section('javascript')
     <script src="{{ asset('js/report.js?v=' . $asset_v) }}"></script>
     <script type="text/javascript">
+        // Function to update purchase/sell section
+        function updatePurchaseSellSection() {
+            var start, end;
+            
+            // Check if date filter is initialized
+            if ($('#purchase_sell_date_filter').length > 0 && $('#purchase_sell_date_filter').data('daterangepicker')) {
+                start = $('#purchase_sell_date_filter')
+                    .data('daterangepicker')
+                    .startDate.format('YYYY-MM-DD');
+                end = $('#purchase_sell_date_filter')
+                    .data('daterangepicker')
+                    .endDate.format('YYYY-MM-DD');
+            } else {
+                // Use default date range if not initialized
+                var today = moment();
+                start = today.clone().startOf('month').format('YYYY-MM-DD');
+                end = today.clone().endOf('month').format('YYYY-MM-DD');
+            }
+            
+            var location_id = $('#purchase_sell_location_filter').val();
+
+            var data = { start_date: start, end_date: end, location_id: location_id };
+
+            var loader = '<i class="fas fa-sync fa-spin fa-fw"></i>';
+            $('.total_sell').html(loader);
+            $('.sell_inc_tax').html(loader);
+            $('.sell_minus_purchase').html(loader);
+            $('.difference_due').html(loader);
+
+            $.ajax({
+                method: 'GET',
+                url: '/reports/purchase-sell',
+                dataType: 'json',
+                data: data,
+                success: function(data) {
+                    $('.total_sell').html(__currency_trans_from_en(data.sell.total_sell_exc_tax, true));
+                    $('.sell_inc_tax').html(__currency_trans_from_en(data.sell.total_sell_inc_tax, true));
+                    $('.sell_minus_purchase').html(__currency_trans_from_en(data.difference.total, true));
+                    __highlight(data.difference.total, $('.sell_minus_purchase'));
+                    $('.difference_due').html(__currency_trans_from_en(data.difference.due, true));
+                    __highlight(data.difference.due, $('.difference_due'));
+                },
+            });
+        }
+
         $(
         '#product_sell_report_form #location_id, #product_sell_report_form #customer_id, #psr_filter_brand_id, #psr_filter_category_id, #psr_customer_group_id'
     ).change(function() {
         $('.nav-tabs li.active').find('a[data-toggle="tab"]').trigger('shown.bs.tab');
     });
         $(document).ready( function() {
+            // Initialize purchase/sell date filter
+            if ($('#purchase_sell_date_filter').length == 1) {
+                $('#purchase_sell_date_filter').daterangepicker(dateRangeSettings, function(start, end) {
+                    $('#purchase_sell_date_filter span').html(
+                        start.format(moment_date_format) + ' ~ ' + end.format(moment_date_format)
+                    );
+                    updatePurchaseSellSection();
+                });
+                $('#purchase_sell_date_filter').on('cancel.daterangepicker', function(ev, picker) {
+                    $('#purchase_sell_date_filter').html(
+                        '<i class="fa fa-calendar"></i> ' + LANG.filter_by_date
+                    );
+                    updatePurchaseSellSection();
+                });
+                updatePurchaseSellSection();
+            }
+
+            // Update purchase/sell section when location changes
+            $('#purchase_sell_location_filter').on('change', function() {
+                updatePurchaseSellSection();
+            });
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 var target = $(e.target).attr('href');
                 if ( target == '#psr_by_cat_tab') {

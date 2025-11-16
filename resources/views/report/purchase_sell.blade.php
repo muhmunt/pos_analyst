@@ -39,7 +39,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-xs-6">
+        <!-- <div class="col-xs-6">
             @component('components.widget', ['title' => __('purchase.purchases')])
                 <table class="table table-striped">
                     <tr>
@@ -76,9 +76,9 @@
                     </tr>
                 </table>
             @endcomponent
-        </div>
+        </div> -->
 
-        <div class="col-xs-6">
+        <div class="col-xs-12">
             @component('components.widget', ['title' => __('sale.sells')])
                 <table class="table table-striped">
                     <tr>
@@ -97,22 +97,22 @@
                             </span>
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <th>{{ __('lang_v1.total_sell_return_inc_tax') }}:</th>
                         <td>
                              <span class="total_sell_return">
                                 <i class="fas fa-sync fa-spin fa-fw"></i>
                             </span>
                         </td>
-                    </tr>
-                    <tr>
+                    </tr> -->
+                    <!-- <tr>
                         <th>{{ __('report.sell_due') }}: @show_tooltip(__('tooltip.sell_due'))</th>
                         <td>
                             <span class="sell_due">
                                 <i class="fas fa-sync fa-spin fa-fw"></i>
                             </span>
                         </td>
-                    </tr>
+                    </tr> -->
                 </table>
             @endcomponent
         </div>
