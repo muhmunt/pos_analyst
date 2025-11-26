@@ -15,6 +15,11 @@ use App\Utils\TransactionUtil;
 use App\Utils\ProductUtil;
 use App\Utils\Util;
 use App\VariationLocationDetails;
+use App\Services\AIInsightService;
+use App\TransactionSellLine;
+use App\Product;
+use App\PurchaseLine;
+use App\TransactionSellLinesPurchaseLines;
 use Datatables;
 use DB;
 use Illuminate\Http\Request;
@@ -630,5 +635,275 @@ class HomeController extends Controller
         $response = $this->moduleUtil->getLocationFromCoordinates($latlng_array[0], $latlng_array[1]);
 
         return ['address' => $response];
+    }
+
+    /**
+     * Get AI insights for dashboard
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAIInsights(Request $request)
+    {
+        try {
+            if (!auth()->user()->can('dashboard.data')) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            $business_id = $request->session()->get('user.business_id');
+            $location_id = $request->get('location_id');
+            
+            // Get date range (default to last 30 days vs previous 30 days)
+            $end_date = $request->get('end_date', \Carbon::now()->format('Y-m-d'));
+            $start_date = $request->get('start_date', \Carbon::parse($end_date)->subDays(30)->format('Y-m-d'));
+            $previous_start = \Carbon::parse($start_date)->subDays(30)->format('Y-m-d');
+            $previous_end = $start_date;
+
+            $permitted_locations = auth()->user()->permitted_locations();
+            
+            // Get sales data for current period
+            $currentSales = $this->getSalesData($business_id, $start_date, $end_date, $location_id, $permitted_locations);
+            
+            // Get sales data for previous period
+            $previousSales = $this->getSalesData($business_id, $previous_start, $previous_end, $location_id, $permitted_locations);
+            
+            // Get trending products
+            $trendingProducts = $this->getTrendingProductsData($business_id, $start_date, $end_date, $location_id, $permitted_locations);
+            
+            // Get stock alerts
+            $stockData = $this->getStockData($business_id, $location_id, $permitted_locations);
+            
+            // Prepare data for AI service
+            $data = [
+                'sales' => [
+                    'current_period_revenue' => $currentSales['total_revenue'],
+                    'previous_period_revenue' => $previousSales['total_revenue'],
+                    'total_revenue' => $currentSales['total_revenue'],
+                    'total_cost' => $currentSales['total_cost'],
+                    'total_invoices' => $currentSales['total_invoices'],
+                    'paid_invoices' => $currentSales['paid_invoices'],
+                ],
+                'trending_products' => $trendingProducts,
+                'low_stock_count' => $stockData['low_stock_count'],
+                'total_products' => $stockData['total_products'],
+            ];
+            
+            // Log data being sent to AI service
+            \Log::info('📊 AI Insights: Data prepared for AI service', [
+                'date_range' => ['start' => $start_date, 'end' => $end_date],
+                'location_id' => $location_id,
+                'data_summary' => [
+                    'current_revenue' => $data['sales']['current_period_revenue'],
+                    'previous_revenue' => $data['sales']['previous_period_revenue'],
+                    'total_revenue' => $data['sales']['total_revenue'],
+                    'total_cost' => $data['sales']['total_cost'],
+                    'profit_margin' => $data['sales']['total_revenue'] > 0 
+                        ? (($data['sales']['total_revenue'] - $data['sales']['total_cost']) / $data['sales']['total_revenue']) * 100 
+                        : 0,
+                    'trending_products_count' => count($trendingProducts),
+                    'low_stock_count' => $stockData['low_stock_count'],
+                    'total_products' => $stockData['total_products'],
+                ]
+            ]);
+            
+            // Generate insights using AI service
+            $aiService = new AIInsightService();
+            $insights = $aiService->generateInsights($data, 60); // Cache for 60 minutes
+            
+            // Add trending products to response
+            $insights['trending_products'] = $trendingProducts;
+            
+            // Log final response
+            \Log::info('✅ AI Insights: Insights generated successfully', [
+                'has_metrics' => !empty($insights['metrics']),
+                'has_summary' => !empty($insights['summary']),
+                'recommendations_count' => count($insights['recommendations'] ?? []),
+                'analysis_sections_count' => count($insights['detailed_analysis'] ?? []),
+                'trending_products_count' => count($trendingProducts),
+                'generated_at' => $insights['generated_at'] ?? null,
+            ]);
+            
+            return response()->json($insights);
+        } catch (\Exception $e) {
+            \Log::error('Error in getAIInsights: ' . $e->getMessage() . ' | Trace: ' . $e->getTraceAsString());
+            
+            return response()->json([
+                'error' => 'Failed to generate insights',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get sales data for a period
+     */
+    protected function getSalesData($business_id, $start_date, $end_date, $location_id, $permitted_locations)
+    {
+        try {
+            $query = TransactionSellLine::join('transactions as t', 'transaction_sell_lines.transaction_id', '=', 't.id')
+                ->where('t.business_id', $business_id)
+                ->where('t.type', 'sell')
+                ->where('t.status', 'final')
+                ->whereDate('t.transaction_date', '>=', $start_date)
+                ->whereDate('t.transaction_date', '<=', $end_date)
+                ->whereNull('transaction_sell_lines.parent_sell_line_id');
+
+            if ($permitted_locations != 'all') {
+                $query->whereIn('t.location_id', $permitted_locations);
+            }
+
+            if (!empty($location_id)) {
+                $query->where('t.location_id', $location_id);
+            }
+
+            // Get revenue
+            $revenueQuery = clone $query;
+            $revenue = $revenueQuery->select(
+                DB::raw('SUM((transaction_sell_lines.quantity - transaction_sell_lines.quantity_returned) * transaction_sell_lines.unit_price_inc_tax) as total_revenue'),
+                DB::raw('COUNT(DISTINCT t.id) as total_invoices'),
+                DB::raw('COUNT(DISTINCT CASE WHEN t.payment_status = "paid" THEN t.id END) as paid_invoices')
+            )->first();
+
+            // Get cost from purchase lines via transaction_sell_lines_purchase_lines
+            $costQuery = TransactionSellLine::join('transactions as t', 'transaction_sell_lines.transaction_id', '=', 't.id')
+                ->leftJoin('transaction_sell_lines_purchase_lines as tspl', 'transaction_sell_lines.id', '=', 'tspl.sell_line_id')
+                ->leftJoin('purchase_lines as pl', 'tspl.purchase_line_id', '=', 'pl.id')
+                ->where('t.business_id', $business_id)
+                ->where('t.type', 'sell')
+                ->where('t.status', 'final')
+                ->whereDate('t.transaction_date', '>=', $start_date)
+                ->whereDate('t.transaction_date', '<=', $end_date)
+                ->whereNull('transaction_sell_lines.parent_sell_line_id');
+
+            if ($permitted_locations != 'all') {
+                $costQuery->whereIn('t.location_id', $permitted_locations);
+            }
+
+            if (!empty($location_id)) {
+                $costQuery->where('t.location_id', $location_id);
+            }
+
+            $cost = $costQuery->select(
+                DB::raw('SUM((transaction_sell_lines.quantity - transaction_sell_lines.quantity_returned) * COALESCE(pl.purchase_price_inc_tax, 0)) as total_cost')
+            )->first();
+
+            // If no purchase lines linked, try to estimate cost from variation default purchase price
+            $totalCost = (float) ($cost->total_cost ?? 0);
+            if ($totalCost == 0) {
+                $costQuery2 = TransactionSellLine::join('transactions as t', 'transaction_sell_lines.transaction_id', '=', 't.id')
+                    ->join('variations as v', 'transaction_sell_lines.variation_id', '=', 'v.id')
+                    ->where('t.business_id', $business_id)
+                    ->where('t.type', 'sell')
+                    ->where('t.status', 'final')
+                    ->whereDate('t.transaction_date', '>=', $start_date)
+                    ->whereDate('t.transaction_date', '<=', $end_date)
+                    ->whereNull('transaction_sell_lines.parent_sell_line_id');
+
+                if ($permitted_locations != 'all') {
+                    $costQuery2->whereIn('t.location_id', $permitted_locations);
+                }
+
+                if (!empty($location_id)) {
+                    $costQuery2->where('t.location_id', $location_id);
+                }
+
+                $cost2 = $costQuery2->select(
+                    DB::raw('SUM((transaction_sell_lines.quantity - transaction_sell_lines.quantity_returned) * COALESCE(v.dpp_inc_tax, 0)) as total_cost')
+                )->first();
+                
+                $totalCost = (float) ($cost2->total_cost ?? 0);
+            }
+
+            return [
+                'total_revenue' => (float) ($revenue->total_revenue ?? 0),
+                'total_cost' => $totalCost,
+                'total_invoices' => (int) ($revenue->total_invoices ?? 0),
+                'paid_invoices' => (int) ($revenue->paid_invoices ?? 0),
+            ];
+        } catch (\Exception $e) {
+            \Log::error('Error in getSalesData: ' . $e->getMessage());
+            return [
+                'total_revenue' => 0,
+                'total_cost' => 0,
+                'total_invoices' => 0,
+                'paid_invoices' => 0,
+            ];
+        }
+    }
+
+    /**
+     * Get trending products data
+     */
+    protected function getTrendingProductsData($business_id, $start_date, $end_date, $location_id, $permitted_locations)
+    {
+        try {
+            $filters = [
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'limit' => 5,
+            ];
+
+            if (!empty($location_id)) {
+                $filters['location_id'] = $location_id;
+            }
+
+            $products = $this->productUtil->getTrendingProducts($business_id, $filters);
+            
+            $trending = [];
+            if ($products) {
+                foreach ($products as $product) {
+                    $trending[] = [
+                        'name' => ($product->product ?? 'Unknown') . ' - ' . ($product->sku ?? 'N/A'),
+                        'quantity_sold' => (int) ($product->total_unit_sold ?? 0),
+                        'unit' => $product->unit ?? '',
+                    ];
+                }
+            }
+
+            return $trending;
+        } catch (\Exception $e) {
+            \Log::error('Error in getTrendingProductsData: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Get stock data
+     */
+    protected function getStockData($business_id, $location_id, $permitted_locations)
+    {
+        try {
+            $query = Product::where('products.business_id', $business_id)
+                ->join('variations as v', 'products.id', '=', 'v.product_id')
+                ->leftJoin('variation_location_details as vld', function ($join) use ($location_id, $permitted_locations) {
+                    $join->on('v.id', '=', 'vld.variation_id');
+                    if ($permitted_locations != 'all') {
+                        $join->whereIn('vld.location_id', $permitted_locations);
+                    }
+                    if (!empty($location_id)) {
+                        $join->where('vld.location_id', $location_id);
+                    }
+                })
+                ->where('products.enable_stock', 1)
+                ->whereNull('v.deleted_at');
+
+            $totalProducts = $query->distinct('products.id')->count('products.id');
+
+            $lowStockQuery = clone $query;
+            $lowStockCount = $lowStockQuery->whereRaw('COALESCE(vld.qty_available, 0) <= products.alert_quantity')
+                ->distinct('products.id')
+                ->count('products.id');
+
+            return [
+                'total_products' => max(1, $totalProducts), // Ensure at least 1 to avoid division by zero
+                'low_stock_count' => $lowStockCount,
+            ];
+        } catch (\Exception $e) {
+            \Log::error('Error in getStockData: ' . $e->getMessage());
+            return [
+                'total_products' => 1,
+                'low_stock_count' => 0,
+            ];
+        }
     }
 }

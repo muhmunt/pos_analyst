@@ -144,4 +144,50 @@ class UserController extends Controller
 
         return redirect('user/profile')->with('status', $output);
     }
+
+    /**
+     * Change user language quickly
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function changeLanguage(Request $request)
+    {
+        try {
+            $user_id = $request->session()->get('user.id');
+            $language = $request->input('language');
+            
+            // Validate language
+            $available_languages = array_keys(config('constants.langs'));
+            if (!in_array($language, $available_languages)) {
+                return response()->json([
+                    'success' => false,
+                    'msg' => __('messages.invalid_language'),
+                ], 400);
+            }
+            
+            $user = User::find($user_id);
+            $user->language = $language;
+            $user->save();
+            
+            // Update session
+            $session_user = $request->session()->get('user');
+            $session_user['language'] = $language;
+            $request->session()->put('user', $session_user);
+            $request->session()->put('user.language', $language);
+            
+            $output = [
+                'success' => true,
+                'msg' => __('lang_v1.language_changed_successfully'),
+            ];
+        } catch (\Exception $e) {
+            \Log::emergency('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());
+            
+            $output = [
+                'success' => false,
+                'msg' => __('messages.something_went_wrong'),
+            ];
+        }
+        
+        return response()->json($output);
+    }
 }

@@ -190,6 +190,47 @@
             }
         });
 
+        // Language change handler
+        $(document).on('click', '.change_lang', function(e) {
+            e.preventDefault();
+            var language = $(this).attr('value');
+            
+            if (!language) {
+                toastr.error('Invalid language selected');
+                return;
+            }
+            
+            // Show loading
+            toastr.info('Changing language...');
+            
+            $.ajax({
+                url: '/user/change-language',
+                method: 'POST',
+                data: {
+                    language: language,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.msg);
+                        // Reload page to apply language change
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 500);
+                    } else {
+                        toastr.error(response.msg || 'Failed to change language');
+                    }
+                },
+                error: function(xhr) {
+                    var errorMsg = 'Failed to change language';
+                    if (xhr.responseJSON && xhr.responseJSON.msg) {
+                        errorMsg = xhr.responseJSON.msg;
+                    }
+                    toastr.error(errorMsg);
+                }
+            });
+        });
+
         $(document).on('click', function (e) {
             $('[data-toggle="popover"]').popover();
 

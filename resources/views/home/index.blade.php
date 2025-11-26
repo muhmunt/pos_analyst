@@ -169,81 +169,129 @@
     @if (auth()->user()->can('dashboard.data'))
         <div class="tw-px-5 tw-py-6">
             <!-- AI Insights & Summary Section -->
-            <div class="tw-py-6">
-                <div class="tw-transition-all tw-duration-200 tw-bg-white tw-from-purple-50 tw-to-indigo-50 tw-shadow-sm tw-rounded-xl tw-ring-1 hover:tw-shadow-md tw-ring-gray-200">
-                    <div class="tw-p-6 sm:tw-p-8">
-                        <div class="tw-flex tw-items-center tw-gap-3 tw-mb-6">
-                            <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-rounded-full tw-bg-gradient-to-r tw-from-purple-500 tw-to-indigo-600">
-                                <svg aria-hidden="true" class="tw-w-6 tw-h-6 tw-text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
-                                    <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
-                                    <path d="M9 12h6"></path>
-                                    <path d="M9 16h6"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="tw-text-xl tw-font-bold tw-text-gray-900">AI Business Insights</h3>
-                                <p class="tw-text-sm tw-text-gray-600">Smart analysis of your business performance</p>
-                            </div>
-                            <button id="refresh_ai_insights" class="tw-ml-auto tw-inline-flex tw-items-center tw-gap-2 tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-black tw-bg-white tw-from-purple-500 tw-to-indigo-600 tw-rounded-lg hover:tw-from-purple-600 hover:tw-to-indigo-700 tw-transition-colors">
-                                <svg class="tw-w-4 tw-h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                </svg>
-                                Refresh Insights
-                            </button>
-                        </div>
-                        
-                        <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-6">
-                            <!-- Key Metrics Summary -->
-                            <div class="tw-bg-white tw-rounded-lg tw-p-6 tw-shadow-sm tw-ring-1 tw-ring-gray-200">
-                                <h4 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-4">Performance Summary</h4>
-                                <div class="tw-space-y-4">
-                                    <div class="tw-flex tw-justify-between tw-items-center">
-                                        <span class="tw-text-sm tw-text-gray-600">Revenue Trend</span>
-                                        <span class="tw-text-sm tw-font-medium tw-text-green-600" id="revenue_trend">Loading...</span>
-                                    </div>
-                                    <div class="tw-flex tw-justify-between tw-items-center">
-                                        <span class="tw-text-sm tw-text-gray-600">Profit Margin</span>
-                                        <span class="tw-text-sm tw-font-medium" id="profit_margin">Loading...</span>
-                                    </div>
-                                    <div class="tw-flex tw-justify-between tw-items-center">
-                                        <span class="tw-text-sm tw-text-gray-600">Collection Efficiency</span>
-                                        <span class="tw-text-sm tw-font-medium" id="collection_efficiency">Loading...</span>
-                                    </div>
-                                    <div class="tw-flex tw-justify-between tw-items-center">
-                                        <span class="tw-text-sm tw-text-gray-600">Stock Health</span>
-                                        <span class="tw-text-sm tw-font-medium" id="stock_health">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- AI Recommendations -->
-                            <div class="tw-bg-white tw-rounded-lg tw-p-6 tw-shadow-sm tw-ring-1 tw-ring-gray-200">
-                                <h4 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-4">Smart Recommendations</h4>
-                                <div class="tw-space-y-3" id="ai_recommendations">
-                                    <div class="tw-flex tw-items-start tw-gap-3">
-                                        <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded-full tw-bg-blue-100 tw-text-blue-600 tw-flex-shrink-0 tw-mt-0.5">
-                                            <svg class="tw-w-3 tw-h-3" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
-                                        <p class="tw-text-sm tw-text-gray-700">Analyzing your business data...</p>
-                                    </div>
-                                </div>
+            <div class="ai-insights-container">
+                <!-- Header -->
+                <div class="ai-insights-header">
+                    <div>
+                        <h2 class="ai-insights-title">Insight Bisnis AI</h2>
+                        <p class="ai-insights-subtitle">Analisis real-time</p>
+                        <p class="ai-insights-subtitle" id="ai_insights_last_updated" style="margin-top: 4px; font-size: 12px;">Memuat...</p>
+                    </div>
+                    <button id="refresh_ai_insights" class="ai-refresh-btn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+                
+                <!-- Performance Metrics Grid -->
+                <div class="ai-metrics-grid">
+                    <div class="ai-metric-card">
+                        <div class="ai-metric-label">Tren Pendapatan</div>
+                        <div class="ai-metric-value" id="revenue_trend">
+                            <div class="ai-loading">
+                                <div class="ai-loading-spinner"></div>
                             </div>
                         </div>
-
-                        <!-- Detailed Insights -->
-                        <div class="tw-mt-6 tw-bg-white tw-rounded-lg tw-p-6 tw-shadow-sm tw-ring-1 tw-ring-gray-200">
-                            <h4 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-4">Detailed Analysis</h4>
-                            <div class="tw-prose tw-prose-sm tw-max-w-none" id="detailed_analysis">
-                                <div class="tw-flex tw-items-center tw-justify-center tw-py-8">
-                                    <div class="tw-animate-pulse tw-text-gray-400">
-                                        Generating intelligent insights...
-                                    </div>
-                                </div>
+                    </div>
+                    <div class="ai-metric-card">
+                        <div class="ai-metric-label">Margin Laba</div>
+                        <div class="ai-metric-value" id="profit_margin">
+                            <div class="ai-loading">
+                                <div class="ai-loading-spinner"></div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="ai-metric-card">
+                        <div class="ai-metric-label">Efisiensi Penagihan</div>
+                        <div class="ai-metric-value" id="collection_efficiency">
+                            <div class="ai-loading">
+                                <div class="ai-loading-spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ai-metric-card">
+                        <div class="ai-metric-label">Kesehatan Stok</div>
+                        <div class="ai-metric-value" id="stock_health">
+                            <div class="ai-loading">
+                                <div class="ai-loading-spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations and Summary Row -->
+                <div class="ai-content-grid">
+                    <!-- AI Recommendations -->
+                    <div class="ai-content-card">
+                        <div class="ai-content-header">
+                            <div class="ai-content-icon">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6 364h-1m4 0h-1m-1 4v.01M19 10h.01M12 12h.01M12 19h.01M12 9a3 3 0 110 6 3 3 0 010-6z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="ai-content-title">Rekomendasi Cerdas</h3>
+                        </div>
+                        <div class="ai-recommendations-list" id="ai_recommendations">
+                            <div class="ai-loading">
+                                <div class="ai-loading-spinner"></div>
+                                <p style="margin-top: 12px;">Membuat rekomendasi...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Summary -->
+                    <div class="ai-content-card">
+                        <div class="ai-content-header">
+                            <div class="ai-content-icon">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="ai-content-title">Ringkasan Bisnis AI</h3>
+                        </div>
+                        <div class="ai-summary-content" id="ai_summary">
+                            <div class="ai-loading">
+                                <div class="ai-loading-spinner"></div>
+                                <p style="margin-top: 12px;">Generating summary...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trending Products -->
+                <div class="ai-content-card" style="margin-bottom: 24px;">
+                    <div class="ai-content-header">
+                        <div class="ai-content-icon">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <h3 class="ai-content-title">Produk Terlaris</h3>
+                    </div>
+                    <div id="trending_products" class="ai-trending-products">
+                        <div class="ai-loading">
+                            <div class="ai-loading-spinner"></div>
+                            <p style="margin-top: 12px;">Memuat data produk...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Insights -->
+                <div class="ai-analysis-section">
+                    <div class="ai-content-header">
+                        <div class="ai-content-icon">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="ai-content-title">Analisis Detail</h3>
+                    </div>
+                    <div id="detailed_analysis">
+                        <div class="ai-loading">
+                            <div class="ai-loading-spinner"></div>
+                            <p style="margin-top: 12px;">Menganalisis data bisnis...</p>
                         </div>
                     </div>
                 </div>
@@ -503,6 +551,494 @@
         .select2-container {
             width: 100% !important;
         }
+        
+        /* AI Insights Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .tw-animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Smooth transitions for metric cards */
+        .metric-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        /* Scrollbar styling for recommendations */
+        #ai_recommendations::-webkit-scrollbar,
+        #ai_summary::-webkit-scrollbar,
+        #detailed_analysis::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #ai_recommendations::-webkit-scrollbar-track,
+        #ai_summary::-webkit-scrollbar-track,
+        #detailed_analysis::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        #ai_recommendations::-webkit-scrollbar-thumb,
+        #ai_summary::-webkit-scrollbar-thumb,
+        #detailed_analysis::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        
+        #ai_recommendations::-webkit-scrollbar-thumb:hover,
+        #ai_summary::-webkit-scrollbar-thumb:hover,
+        #detailed_analysis::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Pulse animation for loading states */
+        @keyframes pulse-slow {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .tw-animate-pulse-slow {
+            animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Shimmer effect for loading */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        
+        .tw-animate-shimmer {
+            animation: shimmer 2s infinite;
+            background: linear-gradient(to right, #f0f0f0 8%, #e0e0e0 18%, #f0f0f0 33%);
+            background-size: 1000px 100%;
+        }
+        
+        /* Glow effect for active metrics */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+            }
+        }
+        
+        .metric-card-excellent {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        /* Fix for dashboard date filter button */
+        #dashboard_date_filter {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+        }
+        
+        #dashboard_date_filter:focus {
+            outline: 2px solid rgba(59, 130, 246, 0.5);
+            outline-offset: 2px;
+        }
+        
+        /* Ensure daterangepicker dropdown is above other elements */
+        .daterangepicker {
+            z-index: 9999 !important;
+        }
+        
+        /* Minimalist Modern AI Insights Section */
+        .ai-insights-container {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .ai-insights-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .ai-insights-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+        
+        .ai-insights-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        
+        .ai-refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #111827;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ai-refresh-btn:hover {
+            background: #1f2937;
+            transform: translateY(-1px);
+        }
+        
+        .ai-refresh-btn:active {
+            transform: translateY(0);
+        }
+        
+        .ai-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .ai-metric-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+        
+        .ai-metric-card:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .ai-metric-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .ai-metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+        }
+        
+        .ai-metric-value.success {
+            color: #059669;
+        }
+        
+        .ai-metric-value.warning {
+            color: #d97706;
+        }
+        
+        .ai-metric-value.error {
+            color: #dc2626;
+        }
+        
+        .ai-metric-value.info {
+            color: #2563eb;
+        }
+        
+        .ai-content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .ai-content-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .ai-content-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .ai-content-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .ai-content-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+        }
+        
+        .ai-recommendations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .ai-recommendation-item {
+            padding: 16px;
+            background: #f9fafb;
+            border-left: 3px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.6;
+        }
+        
+        .ai-recommendation-item.priority-high {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+        }
+        
+        .ai-recommendation-item.priority-medium {
+            border-left-color: #d97706;
+            background: #fffbeb;
+        }
+        
+        .ai-recommendation-item.priority-low {
+            border-left-color: #2563eb;
+            background: #eff6ff;
+        }
+        
+        .ai-summary-content {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.8;
+        }
+        
+        .ai-summary-content p {
+            margin-bottom: 12px;
+        }
+        
+        .ai-analysis-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .ai-analysis-item {
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .ai-analysis-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .ai-analysis-item-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        
+        .ai-analysis-item-content {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        .ai-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #9ca3af;
+        }
+        
+        .ai-loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #111827;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .ai-error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #dc2626;
+        }
+        
+        .ai-error-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            color: #fca5a5;
+        }
+        
+        /* Scrollbar styling */
+        .ai-recommendations-list::-webkit-scrollbar,
+        .ai-summary-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .ai-recommendations-list::-webkit-scrollbar-track,
+        .ai-summary-content::-webkit-scrollbar-track {
+            background: #f3f4f6;
+            border-radius: 3px;
+        }
+        
+        .ai-recommendations-list::-webkit-scrollbar-thumb,
+        .ai-summary-content::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+        
+        .ai-recommendations-list::-webkit-scrollbar-thumb:hover,
+        .ai-summary-content::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        
+        /* Trending Products Styling */
+        .ai-trending-products {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .ai-trending-product-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .ai-trending-product-item:hover {
+            border-color: #d1d5db;
+            background: #ffffff;
+        }
+        
+        .ai-trending-product-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .ai-trending-product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        
+        .ai-trending-product-sku {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .ai-trending-product-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        
+        .ai-trending-product-quantity {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+        }
+        
+        .ai-trending-product-unit {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .ai-trending-product-rank {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: #111827;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .ai-trending-product-rank.rank-1 {
+            background: #fbbf24;
+            color: #111827;
+        }
+        
+        .ai-trending-product-rank.rank-2 {
+            background: #9ca3af;
+            color: #ffffff;
+        }
+        
+        .ai-trending-product-rank.rank-3 {
+            background: #d97706;
+            color: #ffffff;
+        }
     </style>
 @endsection
 
@@ -583,109 +1119,253 @@
             // AI Insights functionality
             function loadAIInsights() {
                 // Show loading state
-                $('#revenue_trend').html('<span class="tw-animate-pulse">Analyzing...</span>');
-                $('#profit_margin').html('<span class="tw-animate-pulse">Calculating...</span>');
-                $('#collection_efficiency').html('<span class="tw-animate-pulse">Evaluating...</span>');
-                $('#stock_health').html('<span class="tw-animate-pulse">Checking...</span>');
+                $('#revenue_trend').html('<div class="ai-loading"><div class="ai-loading-spinner"></div></div>');
+                $('#profit_margin').html('<div class="ai-loading"><div class="ai-loading-spinner"></div></div>');
+                $('#collection_efficiency').html('<div class="ai-loading"><div class="ai-loading-spinner"></div></div>');
+                $('#stock_health').html('<div class="ai-loading"><div class="ai-loading-spinner"></div></div>');
                 
                 $('#ai_recommendations').html(`
-                    <div class="tw-flex tw-items-center tw-justify-center tw-py-4">
-                        <div class="tw-animate-pulse tw-text-gray-400">Generating recommendations...</div>
+                    <div class="ai-loading">
+                        <div class="ai-loading-spinner"></div>
+                        <p style="margin-top: 12px;">Membuat rekomendasi...</p>
+                    </div>
+                `);
+                
+                $('#ai_summary').html(`
+                    <div class="ai-loading">
+                        <div class="ai-loading-spinner"></div>
+                        <p style="margin-top: 12px;">Membuat ringkasan...</p>
+                    </div>
+                `);
+                
+                $('#trending_products').html(`
+                    <div class="ai-loading">
+                        <div class="ai-loading-spinner"></div>
+                        <p style="margin-top: 12px;">Memuat data produk...</p>
                     </div>
                 `);
                 
                 $('#detailed_analysis').html(`
-                    <div class="tw-flex tw-items-center tw-justify-center tw-py-8">
-                        <div class="tw-animate-pulse tw-text-gray-400">Analyzing business data...</div>
+                    <div class="ai-loading">
+                        <div class="ai-loading-spinner"></div>
+                        <p style="margin-top: 12px;">Menganalisis data bisnis...</p>
                     </div>
                 `);
 
-                // Simulate API call to get AI insights
-                setTimeout(function() {
-                    // This would typically be an AJAX call to your backend
-                    // For now, we'll simulate the response
-                    const insights = generateAIInsights();
-                    
-                    // Update metrics
-                    $('#revenue_trend').html(insights.metrics.revenue_trend);
-                    $('#profit_margin').html(insights.metrics.profit_margin);
-                    $('#collection_efficiency').html(insights.metrics.collection_efficiency);
-                    $('#stock_health').html(insights.metrics.stock_health);
-                    
-                    // Update recommendations
-                    let recommendationsHtml = '';
-                    insights.recommendations.forEach(rec => {
-                        recommendationsHtml += `
-                            <div class="tw-flex tw-items-start tw-gap-3">
-                                <div class="tw-inline-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded-full ${rec.type === 'warning' ? 'tw-bg-yellow-100 tw-text-yellow-600' : rec.type === 'success' ? 'tw-bg-green-100 tw-text-green-600' : 'tw-bg-blue-100 tw-text-blue-600'} tw-flex-shrink-0 tw-mt-0.5">
-                                    <svg class="tw-w-3 tw-h-3" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <p class="tw-text-sm tw-text-gray-700">${rec.message}</p>
-                            </div>
-                        `;
-                    });
-                    $('#ai_recommendations').html(recommendationsHtml);
-                    
-                    // Update detailed analysis
-                    $('#detailed_analysis').html(`
-                        <div class="tw-space-y-4">
-                            ${insights.detailed_analysis.map(section => `
-                                <div>
-                                    <h5 class="tw-font-semibold tw-text-gray-900 tw-mb-2">${section.title}</h5>
-                                    <p class="tw-text-sm tw-text-gray-700">${section.content}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `);
-                    
-                }, 2000); // Simulate 2 second delay for AI processing
-            }
+                // Get date range from dashboard filter if available
+                let start_date = null;
+                let end_date = null;
+                let location_id = $('#dashboard_location').val() || null;
+                
+                if ($('#dashboard_date_filter').length > 0 && $('#dashboard_date_filter').data('daterangepicker')) {
+                    start_date = $('#dashboard_date_filter').data('daterangepicker').startDate.format('YYYY-MM-DD');
+                    end_date = $('#dashboard_date_filter').data('daterangepicker').endDate.format('YYYY-MM-DD');
+                } else {
+                    // Default to last 30 days
+                    end_date = moment().format('YYYY-MM-DD');
+                    start_date = moment().subtract(30, 'days').format('YYYY-MM-DD');
+                }
 
-            function generateAIInsights() {
-                // This is a simulation - in real implementation, this would call your AI service
-                // or backend API that processes the business data
-                return {
-                    metrics: {
-                        revenue_trend: '<span class="tw-text-green-600">↑ 12% growth</span>',
-                        profit_margin: '<span class="tw-text-blue-600">24.5%</span>',
-                        collection_efficiency: '<span class="tw-text-yellow-600">78% - Needs attention</span>',
-                        stock_health: '<span class="tw-text-green-600">Good</span>'
+                // Call real AI insights API
+                console.log('🤖 AI Insights: Requesting insights...', {
+                    start_date: start_date,
+                    end_date: end_date,
+                    location_id: location_id
+                });
+                
+                $.ajax({
+                    url: '/home/ai-insights',
+                    method: 'GET',
+                    data: {
+                        start_date: start_date,
+                        end_date: end_date,
+                        location_id: location_id
                     },
-                    recommendations: [
-                        {
-                            type: 'warning',
-                            message: 'Focus on collecting outstanding invoices to improve cash flow.'
-                        },
-                        {
-                            type: 'info',
-                            message: 'Consider restocking top-performing products based on recent sales trends.'
-                        },
-                        {
-                            type: 'success',
-                            message: 'Your profit margin is healthy - consider scaling successful product lines.'
+                    success: function(insights) {
+                        console.log('✅ AI Insights: Response received', insights);
+                        console.log('📊 Metrics:', insights.metrics);
+                        console.log('💡 Recommendations:', insights.recommendations);
+                        console.log('📝 Summary:', insights.summary);
+                        console.log('📋 Detailed Analysis:', insights.detailed_analysis);
+                        
+                        // Update last updated timestamp
+                        if (insights.generated_at) {
+                            const updatedTime = new Date(insights.generated_at).toLocaleString('id-ID');
+                            $('#ai_insights_last_updated').text('Terakhir diperbarui: ' + updatedTime);
                         }
-                    ],
-                    detailed_analysis: [
-                        {
-                            title: 'Revenue Performance',
-                            content: 'Your business shows strong revenue growth of 12% compared to last period. The sales charts indicate consistent performance with some seasonal variations that could be optimized.'
-                        },
-                        {
-                            title: 'Financial Health',
-                            content: 'Current profit margins are healthy at 24.5%. However, collection efficiency at 78% indicates room for improvement in accounts receivable management.'
-                        },
-                        {
-                            title: 'Inventory Insights',
-                            content: 'Stock levels are generally good, but monitor the products in stock alerts to prevent potential stockouts. Consider implementing automated reordering for fast-moving items.'
-                        },
-                        {
-                            title: 'Opportunities',
-                            content: 'Based on payment recovery data, there are opportunities to improve payment collection processes. Implementing automated payment reminders could boost collection rates.'
+                        
+                        // Display trending products
+                        if (insights.trending_products && insights.trending_products.length > 0) {
+                            let trendingHtml = '';
+                            insights.trending_products.forEach((product, index) => {
+                                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                                const productName = product.name.split(' - ')[0] || product.name;
+                                const productSku = product.name.split(' - ')[1] || '';
+                                trendingHtml += `
+                                    <div class="ai-trending-product-item">
+                                        <div class="ai-trending-product-rank ${rankClass}">${index + 1}</div>
+                                        <div class="ai-trending-product-info">
+                                            <div class="ai-trending-product-name">${productName}</div>
+                                            ${productSku ? `<div class="ai-trending-product-sku">${productSku}</div>` : ''}
+                                        </div>
+                                        <div class="ai-trending-product-stats">
+                                            <div class="ai-trending-product-quantity">${product.quantity_sold || 0}</div>
+                                            <div class="ai-trending-product-unit">${product.unit || 'unit'}</div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            $('#trending_products').html(trendingHtml);
+                        } else {
+                            $('#trending_products').html(`
+                                <div class="ai-loading">
+                                    <p>Tidak ada data produk terlaris pada periode ini.</p>
+                                </div>
+                            `);
                         }
-                    ]
-                };
+                        
+                        // Format and display metrics
+                        const revenueTrend = insights.metrics.revenue_trend;
+                        const revenueClass = revenueTrend.direction === 'up' ? 'success' : 'error';
+                        const revenueText = revenueTrend.direction === 'up' 
+                            ? '↑ ' + Math.abs(revenueTrend.value) + '%'
+                            : '↓ ' + Math.abs(revenueTrend.value) + '%';
+                        $('#revenue_trend').html(`<span class="ai-metric-value ${revenueClass}">${revenueText}</span>`);
+                        
+                        const profitMargin = insights.metrics.profit_margin;
+                        const profitClass = profitMargin.status === 'excellent' ? 'success' 
+                            : profitMargin.status === 'good' ? 'info'
+                            : profitMargin.status === 'fair' ? 'warning'
+                            : 'error';
+                        $('#profit_margin').html(`<span class="ai-metric-value ${profitClass}">${profitMargin.value}%</span>`);
+                        
+                        const collection = insights.metrics.collection_efficiency;
+                        const collectionClass = collection.status === 'excellent' ? 'success' 
+                            : collection.status === 'good' ? 'info'
+                            : collection.status === 'fair' ? 'warning'
+                            : 'error';
+                        $('#collection_efficiency').html(`<span class="ai-metric-value ${collectionClass}">${collection.value}%</span>`);
+                        
+                        const stockHealth = insights.metrics.stock_health;
+                        const stockClass = stockHealth.status === 'excellent' ? 'success' 
+                            : stockHealth.status === 'good' ? 'info'
+                            : stockHealth.status === 'fair' ? 'warning'
+                            : 'error';
+                        const stockText = stockHealth.status === 'excellent' ? 'Excellent' 
+                            : stockHealth.status === 'good' ? 'Good' 
+                            : stockHealth.status === 'fair' ? 'Fair' 
+                            : 'Needs Attention';
+                        $('#stock_health').html(`<span class="ai-metric-value ${stockClass}">${stockText}</span>`);
+                        
+                        // Update recommendations
+                        let recommendationsHtml = '';
+                        if (insights.recommendations && insights.recommendations.length > 0) {
+                            insights.recommendations.forEach((rec) => {
+                                const priorityClass = rec.priority === 'high' ? 'priority-high' 
+                                    : rec.priority === 'medium' ? 'priority-medium' 
+                                    : 'priority-low';
+                                recommendationsHtml += `
+                                    <div class="ai-recommendation-item ${priorityClass}">
+                                        ${rec.message}
+                                    </div>
+                                `;
+                            });
+                        } else {
+                            recommendationsHtml = `
+                                <div class="ai-loading">
+                                    <p>Semua sistem berjalan dengan baik! Tidak ada rekomendasi khusus saat ini.</p>
+                                </div>
+                            `;
+                        }
+                        $('#ai_recommendations').html(recommendationsHtml);
+                        
+                        // Update AI summary
+                        if (insights.summary) {
+                            $('#ai_summary').html(`
+                                <div class="ai-summary-content">
+                                    ${insights.summary.split('\n\n').map(paragraph => 
+                                        `<p>${paragraph.trim()}</p>`
+                                    ).join('')}
+                                </div>
+                            `);
+                        } else {
+                            $('#ai_summary').html(`
+                                <div class="ai-loading">
+                                    <p>Ringkasan tidak tersedia saat ini.</p>
+                                </div>
+                            `);
+                        }
+                        
+                        // Update detailed analysis
+                        if (insights.detailed_analysis && insights.detailed_analysis.length > 0) {
+                            $('#detailed_analysis').html(
+                                insights.detailed_analysis.map((section) => `
+                                    <div class="ai-analysis-item">
+                                        <div class="ai-analysis-item-title">${section.title}</div>
+                                        <div class="ai-analysis-item-content">${section.content}</div>
+                                    </div>
+                                `).join('')
+                            );
+                        } else {
+                            $('#detailed_analysis').html(`
+                                <div class="ai-loading">
+                                    <p>Data analisis detail tidak tersedia saat ini.</p>
+                                </div>
+                            `);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('❌ AI Insights: Error loading insights', {
+                            status: status,
+                            error: error,
+                            response: xhr.responseJSON || xhr.responseText,
+                            statusCode: xhr.status
+                        });
+                        
+                        // Show error states
+                        $('#revenue_trend').html('<span class="ai-metric-value error">Error</span>');
+                        $('#profit_margin').html('<span class="ai-metric-value error">Error</span>');
+                        $('#collection_efficiency').html('<span class="ai-metric-value error">Error</span>');
+                        $('#stock_health').html('<span class="ai-metric-value error">Error</span>');
+                        
+                        $('#ai_recommendations').html(`
+                            <div class="ai-error">
+                                <svg class="ai-error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <p style="font-weight: 500; margin-bottom: 8px;">Gagal memuat rekomendasi</p>
+                                <p style="font-size: 12px;">Silakan refresh atau periksa koneksi Anda.</p>
+                            </div>
+                        `);
+                        $('#ai_summary').html(`
+                            <div class="ai-error">
+                                <svg class="ai-error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <p style="font-weight: 500; margin-bottom: 8px;">Gagal memuat ringkasan</p>
+                                <p style="font-size: 12px;">Silakan refresh atau periksa koneksi Anda.</p>
+                            </div>
+                        `);
+                        $('#trending_products').html(`
+                            <div class="ai-error">
+                                <svg class="ai-error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <p style="font-weight: 500; margin-bottom: 8px;">Gagal memuat produk terlaris</p>
+                                <p style="font-size: 12px;">Silakan refresh atau periksa koneksi Anda.</p>
+                            </div>
+                        `);
+                        $('#detailed_analysis').html(`
+                            <div class="ai-error">
+                                <svg class="ai-error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <p style="font-weight: 500; margin-bottom: 8px;">Gagal memuat analisis</p>
+                                <p style="font-size: 12px;">Silakan refresh atau periksa koneksi Anda.</p>
+                            </div>
+                        `);
+                    }
+                });
             }
 
             // Load AI insights on page load
@@ -693,15 +1373,34 @@
 
             // Refresh insights when button is clicked
             $('#refresh_ai_insights').on('click', function() {
-                $(this).prop('disabled', true);
+                const $btn = $(this);
+                const originalHtml = $btn.html();
+                $btn.prop('disabled', true);
+                $btn.addClass('tw-opacity-75 tw-cursor-not-allowed');
+                $btn.html(`
+                    <svg class="tw-w-4 tw-h-4 tw-animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <span>Refreshing...</span>
+                `);
+                
+                // Clear cache by adding timestamp
                 loadAIInsights();
+                
                 setTimeout(() => {
-                    $(this).prop('disabled', false);
-                }, 2000);
+                    $btn.prop('disabled', false);
+                    $btn.removeClass('tw-opacity-75 tw-cursor-not-allowed');
+                    $btn.html(originalHtml);
+                }, 3000);
             });
 
             // Also refresh insights when dashboard data changes
-            $('#dashboard_location, #dashboard_date_filter').on('change', function() {
+            $('#dashboard_location').on('change', function() {
+                setTimeout(loadAIInsights, 500);
+            });
+            
+            // Listen for daterangepicker apply event
+            $(document).on('apply.daterangepicker', '#dashboard_date_filter', function(ev, picker) {
                 setTimeout(loadAIInsights, 500);
             });
         });
